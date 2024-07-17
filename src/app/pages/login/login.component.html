@@ -1,0 +1,16 @@
+<div class="background-login-container">
+  <div class="login-container">
+    <p>Login</p>
+    <form (ngSubmit) = "onSubmit()">
+      <input
+      name="username"
+      [(ngModel)]="username"
+      placeholder="Username" class="input-login">
+      <input
+      name="password"
+      [(ngModel)]="password"
+      placeholder="password">
+      <button type="submit">login</button>
+    </form>
+  </div>
+</div>
