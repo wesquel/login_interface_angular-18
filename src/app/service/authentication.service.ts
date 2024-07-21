@@ -1,5 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { Injectable } from '@angular/core';
+import { Observable, of } from 'rxjs';
+import { catchError, map } from 'rxjs/operators';
 
 @Injectable({
   providedIn: 'root'
@@ -10,16 +12,11 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient) { }
 
-  authenticate(usernameOrEmail: string, password: string) {
-    const loginData = {usernameOrEmail, password}
-    console.log(usernameOrEmail, password)
-    this.http.post(this.authenticate_url, loginData).subscribe(
-      response => {
-        return true;
-      }, error => {
-        return false;
-      }
-    )
+  authenticate(usernameOrEmail: string, password: string): Observable<boolean> {
+    const loginData = { usernameOrEmail, password };
+    return this.http.post(this.authenticate_url, loginData).pipe(
+      map(() => true),
+      catchError(() => of(false))
+    );
   }
-
 }
