@@ -1,32 +1,38 @@
 import { Component, inject } from '@angular/core';
-import { AuthenticationService } from '../../service/authentication.service';
+import { AuthenticationService } from '../../service/auth/authentication.service';
 import { FormsModule } from '@angular/forms';
-import { firstValueFrom } from 'rxjs';
+import { Router, RouterOutlet } from '@angular/router';
 
 @Component({
   selector: 'app-login',
   standalone: true,
-  imports: [FormsModule],
+  imports: [FormsModule, RouterOutlet],
   templateUrl: './login.component.html',
   styleUrl: './login.component.css'
 })
 export class LoginComponent {
-
   username: string = "";
   password: string = "";
+  errorMessage: string | null = null;
 
-  constructor(private authService: AuthenticationService) {}
+  constructor(private authService: AuthenticationService, private router: Router) {}
 
-  async onSubmit() {
-    try {
-      const isAuthenticated = await firstValueFrom(this.authService.authenticate(this.username, this.password));
-      if (isAuthenticated) {
-        alert('Authentication successful');
-      } else {
-        alert('Authentication failed');
+  onSubmit():void {
+
+    const loginData = { usernameOrEmail: this.username, password: this.password };
+
+    this.authService.login(loginData).subscribe({
+      next: (isLoggedIn) => {
+        if (isLoggedIn) {
+          this.router.navigate(['/dashboard']);
+        } else {
+          this.errorMessage = 'Invalid login credentials!';
+        }
+      },
+      error: (error) => {
+        this.errorMessage = error.message;
       }
-    } catch (error) {
-      console.error('Error during authentication:', error);
-    }
+    });
+
   }
 }

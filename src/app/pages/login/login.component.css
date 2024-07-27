@@ -45,3 +45,21 @@ a:active { text-decoration: none; }
   background-color: #009ba0;
   cursor: pointer;
 }
+
+.input-style {
+  display: block;
+  border: 1px solid red;
+  border-bottom-right-radius: 10px;
+  border-top-left-radius: 10px;
+  padding: 10px;
+  margin: 20px 0;
+}
+
+.input-style:focus {
+  outline: none;
+  border-color: green;
+}
+
+button {
+  align-self: center;
+}

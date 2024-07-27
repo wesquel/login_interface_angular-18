@@ -4,13 +4,17 @@
     <form (ngSubmit) = "onSubmit()">
       <input
       name="username"
+      class="input-style"
       [(ngModel)]="username"
-      placeholder="Username" class="input-login">
+      placeholder="Username">
       <input
       name="password"
+      class="input-style"
       [(ngModel)]="password"
       placeholder="password">
+      <p><a target="_blank" href="http://www.google.com">Esqueceu a senha</a></p>
       <button type="submit">login</button>
     </form>
   </div>
 </div>
+<router-outlet />
