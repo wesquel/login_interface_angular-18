@@ -12,6 +12,10 @@ export class AuthenticationService {
 
   constructor(private http: HttpClient) { }
 
+  private isBrowser(): boolean {
+    return typeof window !== 'undefined' && typeof window.localStorage !== 'undefined';
+  }
+
   login(loginData: {usernameOrEmail: string, password: string}): Observable<boolean | null> {
     return this.http.post<any>(this.authenticate_url, loginData).pipe(
       map(response =>{
@@ -26,21 +30,25 @@ export class AuthenticationService {
     );
   }
 
-  getToken(): string | null{
-    return localStorage.getItem("authToken")
+  getToken(): string | null {
+    return this.isBrowser() ? localStorage.getItem("authToken") : null;
   }
 
   setToken(token: string): void {
-    localStorage.setItem("authToken", token)
+    if (this.isBrowser()) {
+      localStorage.setItem("authToken", token);
+    }
+  }
+
+  logout(): void {
+    if (this.isBrowser()) {
+      localStorage.removeItem("authToken");
+    }
   }
 
   isLoggedIn(): boolean {
     const token = this.getToken();
     return !!token;
-  }
-
-  logout(): void {
-    localStorage.removeItem("authToken")
   }
 
   private handleError(error: HttpErrorResponse): Observable<never> {
